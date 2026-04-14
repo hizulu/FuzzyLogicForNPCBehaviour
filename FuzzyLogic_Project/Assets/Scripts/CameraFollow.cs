@@ -1,0 +1,16 @@
+using UnityEngine;
+
+public class CameraFollow : MonoBehaviour
+{
+    public GameObject player;
+    Vector3 offset;
+    void Start()
+    {
+        offset = transform.position - player.transform.position;
+    }
+
+    void Update()
+    {
+        transform.position = player.transform.position + offset;
+    }
+}

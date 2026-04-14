@@ -1,0 +1,95 @@
+using UnityEngine;
+
+public class PlayerController : MonoBehaviour
+{
+    [Header("Configuración de Movimiento")]
+    [SerializeField] private float walkSpeed = 2.0f;
+    [SerializeField] private float runSpeed = 5.0f;
+    [SerializeField] private float rotationSpeed = 10.0f;
+    [SerializeField] private float acceleration = 10.0f;
+
+    [Header("Referencia a la Cámara")]
+    [SerializeField] private Transform cameraTransform;
+
+    // Componentes
+    private Animator animator;
+    private CharacterController controller;
+
+    // Estado interno
+    private float currentSpeed;
+    private float velocityY;
+    private Vector3 moveDirection;
+
+    // Parámetros de animación (cachear el hash mejora rendimiento)
+    private static readonly int PlayerSpeedParam = Animator.StringToHash("PlayerSpeed");
+
+    private void Awake()
+    {
+        animator = GetComponent<Animator>();
+        controller = GetComponent<CharacterController>();
+    }
+
+    private void Start()
+    {
+        Cursor.lockState = CursorLockMode.Locked;
+    }
+
+    private void Update()
+    {
+        HandleMovement();
+        UpdateAnimator();
+    }
+
+    private void HandleMovement()
+    {
+        // Obtener input
+        float horizontal = Input.GetAxis("Horizontal");
+        float vertical = Input.GetAxis("Vertical");
+        Vector2 input = new Vector2(horizontal, vertical).normalized;
+        bool isRunning = Input.GetKey(KeyCode.LeftShift);
+
+        // Calcular dirección de movimiento relativa a la cámara
+        Vector3 forward = cameraTransform.forward;
+        Vector3 right = cameraTransform.right;
+        forward.y = 0f;
+        right.y = 0f;
+        forward.Normalize();
+        right.Normalize();
+
+        Vector3 desiredMove = (forward * input.y + right * input.x);
+
+        if (input.magnitude >= 0.1f)
+        {
+            // Rotación suave hacia la dirección de movimiento
+            Quaternion targetRotation = Quaternion.LookRotation(desiredMove);
+            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
+
+            // Velocidad objetivo según si corre o camina
+            float targetSpeed = isRunning ? runSpeed : walkSpeed;
+            currentSpeed = Mathf.Lerp(currentSpeed, targetSpeed, acceleration * Time.deltaTime);
+
+            // Guardar dirección de movimiento (sin aplicar gravedad todavía)
+            moveDirection = desiredMove * currentSpeed;
+        }
+        else
+        {
+            // Sin input: desacelerar
+            currentSpeed = Mathf.Lerp(currentSpeed, 0f, acceleration * Time.deltaTime);
+            moveDirection = Vector3.zero;
+        }
+
+        controller.Move(moveDirection * Time.deltaTime);
+    }
+
+    private void UpdateAnimator()
+    {
+        float animationSpeed = 0f;
+        if (currentSpeed > 0.1f)
+        {
+            float speedRatio = Mathf.InverseLerp(walkSpeed, runSpeed, currentSpeed);
+            animationSpeed = Mathf.Lerp(1f, 2f, speedRatio);
+        }
+
+        animator.SetFloat(PlayerSpeedParam, animationSpeed, 0.1f, Time.deltaTime);
+    }
+}
