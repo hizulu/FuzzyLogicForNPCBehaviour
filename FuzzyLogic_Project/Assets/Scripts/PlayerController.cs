@@ -3,49 +3,93 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     [Header("Configuración de Movimiento")]
-    public float walkSpeed = 2.0f;
-    public float runSpeed = 5.0f;
-    public float rotationSpeed = 10.0f;
+    [SerializeField] private float walkSpeed = 2.0f;
+    [SerializeField] private float runSpeed = 5.0f;
+    [SerializeField] private float rotationSpeed = 10.0f;
+    [SerializeField] private float acceleration = 10.0f;
 
+    [Header("Referencia a la Cámara")]
+    [SerializeField] private Transform cameraTransform;
+
+    // Componentes
     private Animator animator;
     private CharacterController controller;
-    private float currentVelocity;
 
-    void Start()
+    // Estado interno
+    private float currentSpeed;
+    private float velocityY;
+    private Vector3 moveDirection;
+
+    // Parámetros de animación (cachear el hash mejora rendimiento)
+    private static readonly int PlayerSpeedParam = Animator.StringToHash("PlayerSpeed");
+
+    private void Awake()
     {
         animator = GetComponent<Animator>();
         controller = GetComponent<CharacterController>();
     }
 
-    void Update()
+    private void Start()
     {
+        Cursor.lockState = CursorLockMode.Locked;
+    }
+
+    private void Update()
+    {
+        HandleMovement();
+        UpdateAnimator();
+    }
+
+    private void HandleMovement()
+    {
+        // Obtener input
         float horizontal = Input.GetAxis("Horizontal");
         float vertical = Input.GetAxis("Vertical");
-        Vector3 direction = new Vector3(horizontal, 0, vertical).normalized;
-
+        Vector2 input = new Vector2(horizontal, vertical).normalized;
         bool isRunning = Input.GetKey(KeyCode.LeftShift);
-        float targetSpeed = isRunning ? runSpeed : walkSpeed;
 
-        if (direction.magnitude >= 0.1f)
+        // Calcular dirección de movimiento relativa a la cámara
+        Vector3 forward = cameraTransform.forward;
+        Vector3 right = cameraTransform.right;
+        forward.y = 0f;
+        right.y = 0f;
+        forward.Normalize();
+        right.Normalize();
+
+        Vector3 desiredMove = (forward * input.y + right * input.x);
+
+        if (input.magnitude >= 0.1f)
         {
-            //Si está corriendo el Blend Tree pone la animación de correr, si no la de caminar
-            float speed = isRunning ? 2.0f : 1.0f;
-
-            //Lerp para suavizar la transición entre velocidades
-            currentVelocity = Mathf.Lerp(currentVelocity, speed, Time.deltaTime * 10f);
-
-            Quaternion targetRotation = Quaternion.LookRotation(direction);
+            // Rotación suave hacia la dirección de movimiento
+            Quaternion targetRotation = Quaternion.LookRotation(desiredMove);
             transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
 
-            controller.Move(direction * targetSpeed * Time.deltaTime);
+            // Velocidad objetivo según si corre o camina
+            float targetSpeed = isRunning ? runSpeed : walkSpeed;
+            currentSpeed = Mathf.Lerp(currentSpeed, targetSpeed, acceleration * Time.deltaTime);
+
+            // Guardar dirección de movimiento (sin aplicar gravedad todavía)
+            moveDirection = desiredMove * currentSpeed;
         }
         else
         {
-            //Si no hay input, el personaje se detiene suavemente y se pone la animación de idle
-            currentVelocity = Mathf.Lerp(currentVelocity, 0f, Time.deltaTime * 10f);
+            // Sin input: desacelerar
+            currentSpeed = Mathf.Lerp(currentSpeed, 0f, acceleration * Time.deltaTime);
+            moveDirection = Vector3.zero;
         }
 
-        //Actualiza el parámetro speed del Blend Tree para cambiar entre las animaciones de idle, caminar y correr
-        animator.SetFloat("PlayerSpeed", currentVelocity);
+        controller.Move(moveDirection * Time.deltaTime);
+    }
+
+    private void UpdateAnimator()
+    {
+        float animationSpeed = 0f;
+        if (currentSpeed > 0.1f)
+        {
+            float speedRatio = Mathf.InverseLerp(walkSpeed, runSpeed, currentSpeed);
+            animationSpeed = Mathf.Lerp(1f, 2f, speedRatio);
+        }
+
+        animator.SetFloat(PlayerSpeedParam, animationSpeed, 0.1f, Time.deltaTime);
     }
 }
