@@ -594,6 +594,12 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: c651f45e9f58c0b40999972b003a7c44, type: 3}
       insertIndex: -1
       addedObject: {fileID: 855937074}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: c651f45e9f58c0b40999972b003a7c44, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 855937075}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: c651f45e9f58c0b40999972b003a7c44, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 855937078}
   m_SourcePrefab: {fileID: 100100000, guid: c651f45e9f58c0b40999972b003a7c44, type: 3}
 --- !u!1 &855937073 stripped
 GameObject:
@@ -622,6 +628,45 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &855937075
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 855937073}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7ed21985ab4c73d4baebb7aa278a676c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AnimalController
+  areaRadius: 10
+  minWaitingTime: 3
+  maxWaitingTime: 7
+  walkSpeed: 2
+  runSpeed: 5
+--- !u!195 &855937078
+NavMeshAgent:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 855937073}
+  m_Enabled: 1
+  m_AgentTypeID: 0
+  m_Radius: 0.5
+  m_Speed: 2
+  m_Acceleration: 8
+  avoidancePriority: 50
+  m_AngularSpeed: 120
+  m_StoppingDistance: 0
+  m_AutoTraverseOffMeshLink: 1
+  m_AutoBraking: 1
+  m_AutoRepath: 1
+  m_Height: 2
+  m_BaseOffset: 0
+  m_WalkableMask: 4294967295
+  m_ObstacleAvoidanceType: 4
 --- !u!1 &922408808 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 9d9b4b0c6c9620e4aa4789f907a3661c, type: 3}
@@ -690,7 +735,6 @@ MonoBehaviour:
   runSpeed: 5
   rotationSpeed: 10
   acceleration: 10
-  gravity: -9.81
   cameraTransform: {fileID: 330585546}
 --- !u!4 &922408814 stripped
 Transform:
@@ -756,6 +800,12 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: a56166c50dd514547a56a534e2e8be37, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1313798224}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: a56166c50dd514547a56a534e2e8be37, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1313798227}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: a56166c50dd514547a56a534e2e8be37, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1313798226}
   m_SourcePrefab: {fileID: 100100000, guid: a56166c50dd514547a56a534e2e8be37, type: 3}
 --- !u!1 &1313798223 stripped
 GameObject:
@@ -772,7 +822,7 @@ Animator:
   m_GameObject: {fileID: 1313798223}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 89c086d3621fc7047b2906fd84bd600a, type: 2}
+  m_Controller: {fileID: 9100000, guid: 7fb997685ff1a1149be16be2158538e2, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -784,6 +834,45 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!195 &1313798226
+NavMeshAgent:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1313798223}
+  m_Enabled: 1
+  m_AgentTypeID: 0
+  m_Radius: 0.5
+  m_Speed: 2
+  m_Acceleration: 8
+  avoidancePriority: 50
+  m_AngularSpeed: 120
+  m_StoppingDistance: 0
+  m_AutoTraverseOffMeshLink: 1
+  m_AutoBraking: 1
+  m_AutoRepath: 1
+  m_Height: 2
+  m_BaseOffset: 0
+  m_WalkableMask: 4294967295
+  m_ObstacleAvoidanceType: 4
+--- !u!114 &1313798227
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1313798223}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7ed21985ab4c73d4baebb7aa278a676c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AnimalController
+  areaRadius: 10
+  minWaitingTime: 3
+  maxWaitingTime: 7
+  walkSpeed: 2
+  runSpeed: 5
 --- !u!1001 &1797176931
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -843,6 +932,12 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 32dc98600211e794288cafaee7e8211d, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1797176933}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 32dc98600211e794288cafaee7e8211d, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1797176936}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 32dc98600211e794288cafaee7e8211d, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1797176935}
   m_SourcePrefab: {fileID: 100100000, guid: 32dc98600211e794288cafaee7e8211d, type: 3}
 --- !u!1 &1797176932 stripped
 GameObject:
@@ -859,7 +954,7 @@ Animator:
   m_GameObject: {fileID: 1797176932}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 4529c36db97caf5469492c95e1b5e026, type: 2}
+  m_Controller: {fileID: 9100000, guid: 19367b2ef01a8a643b365356d3cd11b6, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -871,6 +966,45 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!195 &1797176935
+NavMeshAgent:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1797176932}
+  m_Enabled: 1
+  m_AgentTypeID: 0
+  m_Radius: 0.5
+  m_Speed: 2
+  m_Acceleration: 8
+  avoidancePriority: 50
+  m_AngularSpeed: 120
+  m_StoppingDistance: 0
+  m_AutoTraverseOffMeshLink: 1
+  m_AutoBraking: 1
+  m_AutoRepath: 1
+  m_Height: 2
+  m_BaseOffset: 0
+  m_WalkableMask: 4294967295
+  m_ObstacleAvoidanceType: 4
+--- !u!114 &1797176936
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1797176932}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7ed21985ab4c73d4baebb7aa278a676c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AnimalController
+  areaRadius: 10
+  minWaitingTime: 3
+  maxWaitingTime: 7
+  walkSpeed: 2
+  runSpeed: 5
 --- !u!1 &1914960473
 GameObject:
   m_ObjectHideFlags: 0
@@ -883,6 +1017,7 @@ GameObject:
   - component: {fileID: 1914960476}
   - component: {fileID: 1914960475}
   - component: {fileID: 1914960474}
+  - component: {fileID: 1914960478}
   m_Layer: 0
   m_Name: Plane
   m_TagString: Untagged
@@ -984,6 +1119,38 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1914960478
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1914960473}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7a5ac11cc976e418e8d13136b07e1f52, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.AI.Navigation::Unity.AI.Navigation.NavMeshSurface
+  m_SerializedVersion: 0
+  m_AgentTypeID: 0
+  m_CollectObjects: 0
+  m_Size: {x: 10, y: 10, z: 10}
+  m_Center: {x: 0, y: 2, z: 0}
+  m_LayerMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_UseGeometry: 0
+  m_DefaultArea: 0
+  m_GenerateLinks: 0
+  m_IgnoreNavMeshAgent: 1
+  m_IgnoreNavMeshObstacle: 1
+  m_OverrideTileSize: 0
+  m_TileSize: 256
+  m_OverrideVoxelSize: 0
+  m_VoxelSize: 0.16666667
+  m_MinRegionArea: 2
+  m_NavMeshData: {fileID: 23800000, guid: d11e9aa5be9ab7043aacb5da8ef36ef2, type: 2}
+  m_BuildHeightMesh: 0
 --- !u!1 &1933568216
 GameObject:
   m_ObjectHideFlags: 0
