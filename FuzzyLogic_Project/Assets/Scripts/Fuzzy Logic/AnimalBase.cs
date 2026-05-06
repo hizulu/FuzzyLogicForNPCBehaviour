@@ -24,4 +24,11 @@ public class AnimalBase : ScriptableObject
     [Header("Velocidad")]
     public float velocidadBase;
     public float velocidadHuida;
+
+    [Header("Salidas")]
+    public float huidaRapida;
+    public float retiradaLenta;
+    public float idle;
+    public float aproxLenta;
+    public float aproxRapida;
 }

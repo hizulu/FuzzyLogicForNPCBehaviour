@@ -1,0 +1,157 @@
+using UnityEngine;
+using UnityEngine.AI;
+
+public class AnimalFuzzyController : MonoBehaviour
+{
+    public AnimalBase animal;
+    public Transform player;
+
+    private NavMeshAgent agent;
+    private Animator animator;
+
+    private float distanciaActual;
+    private float miedoAcumulado;
+    private float curiosidadActual;
+
+    // Matriz que almacena la acción resultante para cada combinación [Curiosidad, Distancia, Miedo]
+    private int[,,] baseReglas = new int[5, 5, 5];
+
+    void Start()
+    {
+        agent = GetComponent<NavMeshAgent>();
+        animator = GetComponent<Animator>();
+        curiosidadActual = 0.5f;
+    }
+
+    void Update()
+    {
+        if (player == null) return;
+
+        ActualizarVariablesEntrada();
+        float intencion = ProcesarLogicaDifusa();
+        EjecutarMovimiento(intencion);
+    }
+
+    void ActualizarVariablesEntrada()
+    {
+        distanciaActual = Vector3.Distance(transform.position, player.position);
+
+        float factorDistancia = Mathf.Clamp01(1 - (distanciaActual / animal.radioDeteccion));
+        miedoAcumulado = factorDistancia * animal.sensibilidadMiedo;
+
+        curiosidadActual -= animal.decaimientoCuriosidad * Time.deltaTime;
+        curiosidadActual = Mathf.Clamp01(curiosidadActual);
+    }
+
+    float ProcesarLogicaDifusa()
+    {
+        //Fuzzificacion
+        float[] fCuriosidad = FuzzificarCuriosidad(curiosidadActual);
+        float[] fDistancia = FuzzificarDistancia(distanciaActual);
+        float[] fMiedo = FuzzificarMiedo(miedoAcumulado);
+
+        float[] pesosSalida = new float[5];
+
+        float[] valoresSalida = {
+            animal.huidaRapida,
+            animal.retiradaLenta,
+            animal.idle,
+            animal.aproxLenta,
+            animal.aproxRapida
+        };
+
+        //Sistema de inferencia
+        for (int c = 0; c < 5; c++)
+        {
+            for (int d = 0; d < 5; d++)
+            {
+                for (int m = 0; m < 5; m++)
+                {
+                    //Operador AND (Mínimo) para ver con que fuerza se activa esta regla
+                    float fuerzaRegla = Mathf.Min(fCuriosidad[c], Mathf.Min(fDistancia[d], fMiedo[m]));
+
+                    if (fuerzaRegla > 0)
+                    {
+                        int indiceAccion = RuleTables.ObtenerAccion(c, d, m);
+                        //Operador OR (Máximo) para acumular el peso de la acción resultante
+                        pesosSalida[indiceAccion] = Mathf.Max(pesosSalida[indiceAccion], fuerzaRegla);
+                    }
+                }
+            }
+        }
+
+        //Defuzzificacion
+        return Defuzzification.Defuzzify(pesosSalida, valoresSalida);
+    }
+
+    //FUNCIONES DE FUZZIFICACION
+    private float[] FuzzificarMiedo(float valor)
+    {
+        float[] grados = new float[5];
+        //TODO: Ajustar segun graficas
+        grados[(int)TagMiedo.Relajado] = MembershipFunction.RightShoulder(valor, 0.1f, 0.3f);
+        grados[(int)TagMiedo.Cauto] = MembershipFunction.Triangle(valor, 0.2f, 0.4f, 0.6f);
+        grados[(int)TagMiedo.Alerta] = MembershipFunction.Triangle(valor, 0.4f, 0.6f, 0.8f);
+        grados[(int)TagMiedo.Asustado] = MembershipFunction.Triangle(valor, 0.6f, 0.8f, 0.9f);
+        grados[(int)TagMiedo.Panico] = MembershipFunction.LeftShoulder(valor, 0.8f, 1.0f);
+        return grados;
+    }
+
+    private float[] FuzzificarDistancia(float valor)
+    {
+        float[] grados = new float[5];
+        //TODO: Adaptar al tamaño del juego
+        grados[(int)TagDistancia.MuyCerca] = MembershipFunction.RightShoulder(valor, 2f, 5f);
+        grados[(int)TagDistancia.Cerca] = MembershipFunction.Triangle(valor, 3f, 8f, 12f);
+        grados[(int)TagDistancia.Media] = MembershipFunction.Triangle(valor, 10f, 15f, 20f);
+        grados[(int)TagDistancia.Lejos] = MembershipFunction.Triangle(valor, 18f, 25f, 30f);
+        grados[(int)TagDistancia.MuyLejos] = MembershipFunction.LeftShoulder(valor, 28f, 35f);
+        return grados;
+    }
+
+    private float[] FuzzificarCuriosidad(float valor)
+    {
+        float[] grados = new float[5];
+        grados[(int)TagCuriosidad.Nula] = MembershipFunction.RightShoulder(valor, 0.1f, 0.3f);
+        grados[(int)TagCuriosidad.Baja] = MembershipFunction.Triangle(valor, 0.2f, 0.4f, 0.6f);
+        grados[(int)TagCuriosidad.Media] = MembershipFunction.Triangle(valor, 0.4f, 0.6f, 0.8f);
+        grados[(int)TagCuriosidad.Alta] = MembershipFunction.Triangle(valor, 0.6f, 0.8f, 0.9f);
+        grados[(int)TagCuriosidad.Extrema] = MembershipFunction.LeftShoulder(valor, 0.8f, 1.0f);
+        return grados;
+    }
+
+    void EjecutarMovimiento(float intencion)
+    {
+        if (Mathf.Abs(intencion) < 0.1f)
+        {
+            agent.isStopped = true;
+            animator.SetBool("IsMoving", false);
+            return;
+        }
+
+        agent.isStopped = false;
+        Vector3 direccion;
+
+        if (intencion > 0)
+        {
+            direccion = (player.position - transform.position).normalized;
+        }
+        else
+        {
+            direccion = (transform.position - player.position).normalized;
+        }
+
+        Vector3 destino = transform.position + direccion * 5f;
+        agent.SetDestination(destino);
+
+        agent.speed = Mathf.Abs(intencion);
+
+        ActualizarAnimacionesFuzzy(agent.speed);
+    }
+
+    void ActualizarAnimacionesFuzzy(float speed)
+    {
+        animator.SetBool("IsMoving", speed > 0.1f);
+        animator.SetFloat("MovementSpeed", speed / 2f);
+    }
+}

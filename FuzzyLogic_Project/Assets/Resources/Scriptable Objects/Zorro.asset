@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e01fff53cf2bb814eac8961ff12c241a, type: 3}
+  m_Name: Zorro
+  m_EditorClassIdentifier: Assembly-CSharp::AnimalBase
+  radioDeteccion: 30
+  sensibilidadMiedo: 1
+  decaimientoMiedo: 0.5
+  desinteresCuriosidad: 0.2
+  decaimientoCuriosidad: 0.1
+  velocidadBase: 5
+  velocidadHuida: 9
+  huidaRapida: -12
+  retiradaLenta: -5
+  idle: 0
+  aproxLenta: 3
+  aproxRapida: 8

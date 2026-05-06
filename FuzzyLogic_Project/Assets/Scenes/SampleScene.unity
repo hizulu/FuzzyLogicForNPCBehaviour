@@ -599,6 +599,9 @@ PrefabInstance:
       addedObject: {fileID: 855937075}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: c651f45e9f58c0b40999972b003a7c44, type: 3}
       insertIndex: -1
+      addedObject: {fileID: 855937079}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: c651f45e9f58c0b40999972b003a7c44, type: 3}
+      insertIndex: -1
       addedObject: {fileID: 855937078}
   m_SourcePrefab: {fileID: 100100000, guid: c651f45e9f58c0b40999972b003a7c44, type: 3}
 --- !u!1 &855937073 stripped
@@ -635,7 +638,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 855937073}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7ed21985ab4c73d4baebb7aa278a676c, type: 3}
   m_Name: 
@@ -667,6 +670,20 @@ NavMeshAgent:
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
+--- !u!114 &855937079
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 855937073}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 689910057bd17544690b3a31701e3e29, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AnimalFuzzyController
+  animal: {fileID: 11400000, guid: 9fffa11abca1fd94fb8ca780c5025419, type: 2}
+  player: {fileID: 922408814}
 --- !u!1 &922408808 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 9d9b4b0c6c9620e4aa4789f907a3661c, type: 3}
@@ -805,6 +822,9 @@ PrefabInstance:
       addedObject: {fileID: 1313798227}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: a56166c50dd514547a56a534e2e8be37, type: 3}
       insertIndex: -1
+      addedObject: {fileID: 1313798228}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: a56166c50dd514547a56a534e2e8be37, type: 3}
+      insertIndex: -1
       addedObject: {fileID: 1313798226}
   m_SourcePrefab: {fileID: 100100000, guid: a56166c50dd514547a56a534e2e8be37, type: 3}
 --- !u!1 &1313798223 stripped
@@ -863,7 +883,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1313798223}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7ed21985ab4c73d4baebb7aa278a676c, type: 3}
   m_Name: 
@@ -873,6 +893,20 @@ MonoBehaviour:
   maxWaitingTime: 7
   walkSpeed: 2
   runSpeed: 5
+--- !u!114 &1313798228
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1313798223}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 689910057bd17544690b3a31701e3e29, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AnimalFuzzyController
+  animal: {fileID: 11400000, guid: c8dee26c2a58fbc4eaa8147ca6a64abd, type: 2}
+  player: {fileID: 922408814}
 --- !u!1001 &1797176931
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -935,6 +969,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 32dc98600211e794288cafaee7e8211d, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1797176936}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 32dc98600211e794288cafaee7e8211d, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1797176937}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 32dc98600211e794288cafaee7e8211d, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1797176935}
@@ -1005,6 +1042,20 @@ MonoBehaviour:
   maxWaitingTime: 7
   walkSpeed: 2
   runSpeed: 5
+--- !u!114 &1797176937
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1797176932}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 689910057bd17544690b3a31701e3e29, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AnimalFuzzyController
+  animal: {fileID: 11400000, guid: cee9598f3e4601748a132d0f9f4872c1, type: 2}
+  player: {fileID: 922408814}
 --- !u!1 &1914960473
 GameObject:
   m_ObjectHideFlags: 0
