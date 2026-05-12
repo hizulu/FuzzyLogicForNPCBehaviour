@@ -17,8 +17,8 @@ MonoBehaviour:
   decaimientoMiedo: 0.8
   desinteresCuriosidad: 2
   decaimientoCuriosidad: 1.5
-  velocidadBase: 3
-  velocidadHuida: 12
+  velocidadBase: 2
+  velocidadHuida: 3
   huidaRapida: -20
   retiradaLenta: -10
   idle: 0

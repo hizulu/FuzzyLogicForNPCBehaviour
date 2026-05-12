@@ -31,11 +31,11 @@ public class MembershipFunction: MonoBehaviour
         float membership = 0f;
 
         if (value <= x0)
-            membership = 0f;
-        else if (value > x0 && value < x1)
-            membership = (value / (x1 - x0)) - (x0 / (x1 - x0));
-        else if (value >= x1)
             membership = 1f;
+        else if (value > x0 && value < x1)
+            membership = (-value / (x1 - x0)) + (x1 / (x1 - x0));
+        else if (value >= x1)
+            membership = 0f;
 
         return membership;
     }
@@ -45,11 +45,11 @@ public class MembershipFunction: MonoBehaviour
         float membership = 0f;
 
         if (value <= x0)
-            membership = 1f;
-        else if (value > x0 && value < x1)
-            membership = (-value / (x1 - x0)) + (x0 / (x1 - x0));
-        else if (value >= x1)
             membership = 0f;
+        else if (value > x0 && value < x1)
+            membership = (value / (x1 - x0)) - (x0 / (x1 - x0));
+        else if (value >= x1)
+            membership = 1f;
 
         return membership;
     }

@@ -30,16 +30,32 @@ public class AnimalFuzzyController : MonoBehaviour
         ActualizarVariablesEntrada();
         float intencion = ProcesarLogicaDifusa();
         EjecutarMovimiento(intencion);
+        Debug.Log($"Animal: {animal} | Miedo: {miedoAcumulado} | Curiosidad: {curiosidadActual} | Intencion: {intencion}");
     }
 
     void ActualizarVariablesEntrada()
     {
         distanciaActual = Vector3.Distance(transform.position, player.position);
 
-        float factorDistancia = Mathf.Clamp01(1 - (distanciaActual / animal.radioDeteccion));
-        miedoAcumulado = factorDistancia * animal.sensibilidadMiedo;
+        float factorEstres = Mathf.Clamp01(1 - (distanciaActual / animal.radioDeteccion));
+        if (distanciaActual <= animal.radioDeteccion)
+            miedoAcumulado += factorEstres * animal.sensibilidadMiedo * Time.deltaTime;
+        else
+            miedoAcumulado -= animal.decaimientoMiedo * Time.deltaTime;
 
-        curiosidadActual -= animal.decaimientoCuriosidad * Time.deltaTime;
+        miedoAcumulado = Mathf.Clamp01(miedoAcumulado);
+
+
+        if (miedoAcumulado < 0.8f && distanciaActual < animal.radioDeteccion * 1.5f)
+        {
+            float impulsoCurioso = (1 - (distanciaActual / (animal.radioDeteccion * 1.5f))) * 0.5f;
+            curiosidadActual += impulsoCurioso * Time.deltaTime;
+        }
+        else
+        {
+            curiosidadActual -= animal.decaimientoCuriosidad * Time.deltaTime;
+        }
+
         curiosidadActual = Mathf.Clamp01(curiosidadActual);
     }
 
@@ -89,11 +105,11 @@ public class AnimalFuzzyController : MonoBehaviour
     {
         float[] grados = new float[5];
         //TODO: Ajustar segun graficas
-        grados[(int)TagMiedo.Relajado] = MembershipFunction.RightShoulder(valor, 0.1f, 0.3f);
+        grados[(int)TagMiedo.Relajado] = MembershipFunction.LeftShoulder(valor, 0.1f, 0.3f);
         grados[(int)TagMiedo.Cauto] = MembershipFunction.Triangle(valor, 0.2f, 0.4f, 0.6f);
         grados[(int)TagMiedo.Alerta] = MembershipFunction.Triangle(valor, 0.4f, 0.6f, 0.8f);
         grados[(int)TagMiedo.Asustado] = MembershipFunction.Triangle(valor, 0.6f, 0.8f, 0.9f);
-        grados[(int)TagMiedo.Panico] = MembershipFunction.LeftShoulder(valor, 0.8f, 1.0f);
+        grados[(int)TagMiedo.Panico] = MembershipFunction.RightShoulder(valor, 0.8f, 1.0f);
         return grados;
     }
 
@@ -101,22 +117,22 @@ public class AnimalFuzzyController : MonoBehaviour
     {
         float[] grados = new float[5];
         //TODO: Adaptar al tamaño del juego
-        grados[(int)TagDistancia.MuyCerca] = MembershipFunction.RightShoulder(valor, 2f, 5f);
+        grados[(int)TagDistancia.MuyCerca] = MembershipFunction.LeftShoulder(valor, 2f, 5f);
         grados[(int)TagDistancia.Cerca] = MembershipFunction.Triangle(valor, 3f, 8f, 12f);
         grados[(int)TagDistancia.Media] = MembershipFunction.Triangle(valor, 10f, 15f, 20f);
         grados[(int)TagDistancia.Lejos] = MembershipFunction.Triangle(valor, 18f, 25f, 30f);
-        grados[(int)TagDistancia.MuyLejos] = MembershipFunction.LeftShoulder(valor, 28f, 35f);
+        grados[(int)TagDistancia.MuyLejos] = MembershipFunction.RightShoulder(valor, 28f, 35f);
         return grados;
     }
 
     private float[] FuzzificarCuriosidad(float valor)
     {
         float[] grados = new float[5];
-        grados[(int)TagCuriosidad.Nula] = MembershipFunction.RightShoulder(valor, 0.1f, 0.3f);
+        grados[(int)TagCuriosidad.Nula] = MembershipFunction.LeftShoulder(valor, 0.1f, 0.3f);
         grados[(int)TagCuriosidad.Baja] = MembershipFunction.Triangle(valor, 0.2f, 0.4f, 0.6f);
         grados[(int)TagCuriosidad.Media] = MembershipFunction.Triangle(valor, 0.4f, 0.6f, 0.8f);
         grados[(int)TagCuriosidad.Alta] = MembershipFunction.Triangle(valor, 0.6f, 0.8f, 0.9f);
-        grados[(int)TagCuriosidad.Extrema] = MembershipFunction.LeftShoulder(valor, 0.8f, 1.0f);
+        grados[(int)TagCuriosidad.Extrema] = MembershipFunction.RightShoulder(valor, 0.8f, 1.0f);
         return grados;
     }
 
