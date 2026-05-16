@@ -708,6 +708,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::AnimalFuzzyController
   animal: {fileID: 11400000, guid: 9fffa11abca1fd94fb8ca780c5025419, type: 2}
   player: {fileID: 922408814}
+  minWaitingTime: 3
+  maxWaitingTime: 7
 --- !u!1 &922408808 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 9d9b4b0c6c9620e4aa4789f907a3661c, type: 3}
@@ -947,6 +949,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::AnimalFuzzyController
   animal: {fileID: 11400000, guid: c8dee26c2a58fbc4eaa8147ca6a64abd, type: 2}
   player: {fileID: 922408814}
+  minWaitingTime: 3
+  maxWaitingTime: 7
 --- !u!1001 &1797176931
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1104,6 +1108,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::AnimalFuzzyController
   animal: {fileID: 11400000, guid: cee9598f3e4601748a132d0f9f4872c1, type: 2}
   player: {fileID: 922408814}
+  minWaitingTime: 3
+  maxWaitingTime: 7
 --- !u!1 &1914960473
 GameObject:
   m_ObjectHideFlags: 0
