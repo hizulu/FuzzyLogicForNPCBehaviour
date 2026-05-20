@@ -11,16 +11,13 @@ public class PlayerController : MonoBehaviour
     [Header("Referencia a la Cámara")]
     [SerializeField] private Transform cameraTransform;
 
-    // Componentes
     private Animator animator;
     private CharacterController controller;
 
-    // Estado interno
     private float currentSpeed;
     private float velocityY;
     private Vector3 moveDirection;
 
-    // Parámetros de animación (cachear el hash mejora rendimiento)
     private static readonly int PlayerSpeedParam = Animator.StringToHash("PlayerSpeed");
 
     private void Awake()
@@ -42,13 +39,13 @@ public class PlayerController : MonoBehaviour
 
     private void HandleMovement()
     {
-        // Obtener input
+        //Obtener input
         float horizontal = Input.GetAxis("Horizontal");
         float vertical = Input.GetAxis("Vertical");
         Vector2 input = new Vector2(horizontal, vertical).normalized;
         bool isRunning = Input.GetKey(KeyCode.LeftShift);
 
-        // Calcular dirección de movimiento relativa a la cámara
+        //Calcular dirección de movimiento relativa a la cámara
         Vector3 forward = cameraTransform.forward;
         Vector3 right = cameraTransform.right;
         forward.y = 0f;
@@ -60,20 +57,19 @@ public class PlayerController : MonoBehaviour
 
         if (input.magnitude >= 0.1f)
         {
-            // Rotación suave hacia la dirección de movimiento
+            //Rotación suave hacia la dirección de movimiento
             Quaternion targetRotation = Quaternion.LookRotation(desiredMove);
             transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
 
-            // Velocidad objetivo según si corre o camina
+            //Velocidad objetivo según si corre o camina
             float targetSpeed = isRunning ? runSpeed : walkSpeed;
             currentSpeed = Mathf.Lerp(currentSpeed, targetSpeed, acceleration * Time.deltaTime);
 
-            // Guardar dirección de movimiento (sin aplicar gravedad todavía)
             moveDirection = desiredMove * currentSpeed;
         }
         else
         {
-            // Sin input: desacelerar
+            //Sin input: desacelerar
             currentSpeed = Mathf.Lerp(currentSpeed, 0f, acceleration * Time.deltaTime);
             moveDirection = Vector3.zero;
         }

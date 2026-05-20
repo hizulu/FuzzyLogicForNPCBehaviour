@@ -149,7 +149,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 4064937815292731611, guid: c651f45e9f58c0b40999972b003a7c44, type: 3}
+  m_Motion: {fileID: -7297658313450526458, guid: 86692b9f6561f8c4ab2dc4afa92bef25, type: 3}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 
@@ -202,7 +202,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: -843130652656050003, guid: a56166c50dd514547a56a534e2e8be37, type: 3}
+  m_Motion: {fileID: -843130652656050003, guid: 86692b9f6561f8c4ab2dc4afa92bef25, type: 3}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 
@@ -214,7 +214,7 @@ AnimatorController:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Vaca_AnimatorController
+  m_Name: Vaca_AnimatorController 1
   serializedVersion: 5
   m_AnimatorParameters:
   - m_Name: IsMoving
@@ -294,7 +294,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 642577771507529730, guid: c651f45e9f58c0b40999972b003a7c44, type: 3}
+  m_Motion: {fileID: 5037499863225090720, guid: 86692b9f6561f8c4ab2dc4afa92bef25, type: 3}
   m_Tag: 
   m_SpeedParameter: MovementSpeed
   m_MirrorParameter: 

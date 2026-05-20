@@ -7,29 +7,29 @@ using UnityEngine;
  * VERSIÓN: 1.0
  */
 
-[CreateAssetMenu(fileName = "AnimalBase", menuName = "Scriptable Objects/Nuevo Perfil Animal")]
+[CreateAssetMenu(fileName = "AnimalBase", menuName = "Scriptable Objects/New Animal")]
 public class AnimalBase : ScriptableObject
 {
-    [Header("Distancia")]
-    public float radioDeteccion;
+    [Header("Distance")]
+    public float detectionRadius;
 
-    [Header("Miedo")]
-    public float sensibilidadMiedo;
-    public float decaimientoMiedo;
+    [Header("Fear")]
+    public float fearSensitivity;
+    public float fearDecay;
 
-    [Header("Curiosidad")]
-    public float desinteresCuriosidad;
-    public float decaimientoCuriosidad;
+    [Header("Curiosity")]
+    public float curiosityDisinterest;
+    public float curiosityDecay;
 
-    [Header("Velocidad")]
-    public float velocidadBase;
-    public float velocidadHuida;
-    public float velocidadMaxima;
+    [Header("Speed")]
+    public float baseSpeed;
+    public float fleeSpeed;
+    public float maxSpeed;
 
-    [Header("Salidas")]
-    public float huidaRapida;
-    public float retiradaLenta;
+    [Header("Outputs")]
+    public float fastFlee;
+    public float slowRetreat;
     public float idle;
-    public float aproxLenta;
-    public float aproxRapida;
+    public float slowApproach;
+    public float fastApproach;
 }

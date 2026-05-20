@@ -12,15 +12,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e01fff53cf2bb814eac8961ff12c241a, type: 3}
   m_Name: Zorro
   m_EditorClassIdentifier: Assembly-CSharp::AnimalBase
-  radioDeteccion: 30
-  sensibilidadMiedo: 1
-  decaimientoMiedo: 0.5
-  desinteresCuriosidad: 0.2
-  decaimientoCuriosidad: 0.1
-  velocidadBase: 3
-  velocidadHuida: 6
-  huidaRapida: -12
-  retiradaLenta: -5
+  detectionRadius: 30
+  fearSensitivity: 1
+  fearDecay: 0.4
+  curiosityDisinterest: 0.2
+  curiosityDecay: 0.1
+  baseSpeed: 2.5
+  fleeSpeed: 6.5
+  maxSpeed: 8.5
+  fastFlee: -12
+  slowRetreat: -5
   idle: 0
-  aproxLenta: 3
-  aproxRapida: 8
+  slowApproach: 3
+  fastApproach: 8

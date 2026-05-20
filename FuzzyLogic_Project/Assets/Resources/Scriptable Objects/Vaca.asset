@@ -12,15 +12,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e01fff53cf2bb814eac8961ff12c241a, type: 3}
   m_Name: Vaca
   m_EditorClassIdentifier: Assembly-CSharp::AnimalBase
-  radioDeteccion: 20
-  sensibilidadMiedo: 0.3
-  decaimientoMiedo: 0.1
-  desinteresCuriosidad: 1
-  decaimientoCuriosidad: 0.8
-  velocidadBase: 2
-  velocidadHuida: 4
-  huidaRapida: -5
-  retiradaLenta: -2
+  detectionRadius: 20
+  fearSensitivity: 0.1
+  fearDecay: 0.2
+  curiosityDisinterest: 1
+  curiosityDecay: 0.05
+  baseSpeed: 1.2
+  fleeSpeed: 3.5
+  maxSpeed: 5
+  fastFlee: -5
+  slowRetreat: -2
   idle: 0
-  aproxLenta: 2
-  aproxRapida: 5
+  slowApproach: 2
+  fastApproach: 5

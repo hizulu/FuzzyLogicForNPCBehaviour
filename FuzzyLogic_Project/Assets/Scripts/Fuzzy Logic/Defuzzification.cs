@@ -4,6 +4,7 @@ public class Defuzzification : MonoBehaviour
 {
     public static float Defuzzify(float[] membershipGrades, float[] targetValues)
     {
+        //Si hay 3 grados de pertenencia pero solo 2 valores objetivo hay un error
         if (membershipGrades.Length != targetValues.Length || membershipGrades.Length == 0)
         {
             Debug.LogError("Las listas de membershipGrades y targetValues deben tener el mismo tamaño.");
@@ -20,7 +21,7 @@ public class Defuzzification : MonoBehaviour
             sumDenominator += membershipGrades[i];
         }
 
-        // Prevención de división por cero si ninguna regla se activó
+        //Prevención de división por cero si ninguna regla se activó
         if (sumDenominator == 0) return 0f;
 
         return sumNumerator / sumDenominator;

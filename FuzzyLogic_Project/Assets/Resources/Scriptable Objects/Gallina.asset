@@ -12,15 +12,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e01fff53cf2bb814eac8961ff12c241a, type: 3}
   m_Name: Gallina
   m_EditorClassIdentifier: Assembly-CSharp::AnimalBase
-  radioDeteccion: 40
-  sensibilidadMiedo: 2.5
-  decaimientoMiedo: 0.8
-  desinteresCuriosidad: 2
-  decaimientoCuriosidad: 1.5
-  velocidadBase: 2
-  velocidadHuida: 3
-  huidaRapida: -20
-  retiradaLenta: -10
+  detectionRadius: 40
+  fearSensitivity: 2.5
+  fearDecay: 0.1
+  curiosityDisinterest: 2
+  curiosityDecay: 0.9
+  baseSpeed: 1.5
+  fleeSpeed: 5
+  maxSpeed: 6
+  fastFlee: -20
+  slowRetreat: -10
   idle: 0
-  aproxLenta: 1
-  aproxRapida: 2
+  slowApproach: 1
+  fastApproach: 2
