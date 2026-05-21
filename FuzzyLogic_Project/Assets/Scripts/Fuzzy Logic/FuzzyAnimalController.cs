@@ -66,11 +66,23 @@ public class FuzzyAnimalController : MonoBehaviour
             wasIdle = false;
             agent.isStopped = false;
 
-            Vector3 direction = (intentionValue > 0) ?
-                (player.position - transform.position).normalized :
-                (transform.position - player.position).normalized;
+            Vector3 dirToPlayer = (player.position - transform.position).normalized;
+            dirToPlayer.y = 0f;
+            dirToPlayer.Normalize();
 
-            Vector3 dynamicDestination = transform.position + direction * 3f;
+            Vector3 dynamicDestination;
+
+            if (intentionValue > 0)
+            {
+                //APROXIMACIÓN: El destino es la posición del jugador MENOS 2 metro de distancia
+                dynamicDestination = player.position - dirToPlayer * 2.0f;
+            }
+            else
+            {
+                //HUIDA: El destino es la posición actual del animal MÁS 2 metros alejándose del jugador
+                dynamicDestination = transform.position - dirToPlayer * 2f;
+            }
+
             agent.SetDestination(dynamicDestination);
 
             float targetSpeed = Mathf.Abs(intentionValue);
@@ -78,7 +90,6 @@ public class FuzzyAnimalController : MonoBehaviour
             if (intentionValue < 0 && playerSpeed > playerMovementThreshold)
             {
                 float runIntensity = Mathf.InverseLerp(playerMovementThreshold, 5.0f, playerSpeed);
-
                 targetSpeed = Mathf.Lerp(targetSpeed, animal.maxSpeed, runIntensity);
             }
 

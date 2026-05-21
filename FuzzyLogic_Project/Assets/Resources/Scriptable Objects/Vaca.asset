@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e01fff53cf2bb814eac8961ff12c241a, type: 3}
   m_Name: Vaca
   m_EditorClassIdentifier: Assembly-CSharp::AnimalBase
-  detectionRadius: 20
+  detectionRadius: 10
   fearSensitivity: 0.1
   fearDecay: 0.2
   curiosityDisinterest: 1
