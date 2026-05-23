@@ -22,6 +22,9 @@ public class FuzzyAnimalController : MonoBehaviour
     public float playerMovementThreshold = 1.5f;
     public float fearMultiplier = 3.0f;
 
+    [Header("Comportamiento de Manada")]
+    public float groupSearchRadius = 30f;
+
     private Vector3 previousPlayerPosition;
     private float playerSpeed;
 
@@ -44,7 +47,7 @@ public class FuzzyAnimalController : MonoBehaviour
         intention = ProcessFuzzyLogic();
         HandleContinuousMovement(intention);
 
-        Debug.Log($"Miedo: {accumulatedFear:F2} | Curiosidad: {currentCuriosity:F2} | Intención: {intention:F2}");
+        //Debug.Log($"Miedo: {accumulatedFear:F2} | Curiosidad: {currentCuriosity:F2} | Intención: {intention:F2}");
     }
 
     void HandleContinuousMovement(float intentionValue)
@@ -59,7 +62,8 @@ public class FuzzyAnimalController : MonoBehaviour
 
             agent.isStopped = true;
             agent.speed = Mathf.MoveTowards(agent.speed, 0f, Time.deltaTime * fuzzyAcceleration);
-            UpdateAnimations(agent.speed);
+
+            UpdateAnimations(agent.velocity.magnitude);
         }
         else
         {
@@ -74,13 +78,20 @@ public class FuzzyAnimalController : MonoBehaviour
 
             if (intentionValue > 0)
             {
-                //APROXIMACIÓN: El destino es la posición del jugador MENOS 2 metro de distancia
                 dynamicDestination = player.position - dirToPlayer * 2.0f;
             }
             else
             {
-                //HUIDA: El destino es la posición actual del animal MÁS 2 metros alejándose del jugador
-                dynamicDestination = transform.position - dirToPlayer * 2f;
+                Vector3 groupCenter = GetNearestGroupCenter();
+
+                if (groupCenter != Vector3.zero)
+                {
+                    dynamicDestination = groupCenter;
+                }
+                else
+                {
+                    dynamicDestination = transform.position - dirToPlayer * 2f;
+                }
             }
 
             agent.SetDestination(dynamicDestination);
@@ -93,9 +104,42 @@ public class FuzzyAnimalController : MonoBehaviour
                 targetSpeed = Mathf.Lerp(targetSpeed, animal.maxSpeed, runIntensity);
             }
 
+            if (!agent.pathPending && agent.remainingDistance <= 0.15f)
+            {
+                targetSpeed = 0f;
+            }
+
             agent.speed = Mathf.MoveTowards(agent.speed, targetSpeed, Time.deltaTime * fuzzyAcceleration);
-            UpdateAnimations(agent.speed);
+
+            UpdateAnimations(agent.velocity.magnitude);
         }
+    }
+
+    private Vector3 GetNearestGroupCenter()
+    {
+        Collider[] nearbyColliders = Physics.OverlapSphere(transform.position, groupSearchRadius);
+        Vector3 center = Vector3.zero;
+        int groupCount = 0;
+
+        foreach (Collider col in nearbyColliders)
+        {
+            if (col.gameObject == this.gameObject) continue;
+
+            FuzzyAnimalController otherAnimal = col.GetComponent<FuzzyAnimalController>();
+
+            if (otherAnimal != null && otherAnimal.animal == this.animal)
+            {
+                center += otherAnimal.transform.position;
+                groupCount++;
+            }
+        }
+
+        if (groupCount > 0)
+        {
+            return center / groupCount;
+        }
+
+        return Vector3.zero;
     }
 
     void UpdateInputVariables()
