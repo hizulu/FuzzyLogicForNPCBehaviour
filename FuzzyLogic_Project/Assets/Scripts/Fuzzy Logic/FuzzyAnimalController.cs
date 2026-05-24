@@ -30,7 +30,7 @@ public class FuzzyAnimalController : MonoBehaviour
     public float fearMultiplier = 3.0f;
 
     [Header("Comportamiento de Manada")]
-    public float groupSearchRadius = 30f;
+    public float groupSearchRadius = 20f;
 
     private Vector3 previousPlayerPosition;
     private float playerSpeed;

@@ -2844,29 +2844,13 @@ PrefabInstance:
       addedObject: {fileID: 337149947}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 0d8915096d648494099af6269b8e1797, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 337149946}
+      addedObject: {fileID: 337149951}
   m_SourcePrefab: {fileID: 100100000, guid: 0d8915096d648494099af6269b8e1797, type: 3}
 --- !u!1 &337149945 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 0d8915096d648494099af6269b8e1797, type: 3}
   m_PrefabInstance: {fileID: 337149944}
   m_PrefabAsset: {fileID: 0}
---- !u!208 &337149946
-NavMeshObstacle:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 337149945}
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Shape: 1
-  m_Extents: {x: 4.165, y: 5.095, z: 4.175}
-  m_MoveThreshold: 0.1
-  m_Carve: 0
-  m_CarveOnlyStationary: 1
-  m_Center: {x: 0, y: 5.0070004, z: 0}
-  m_TimeToStationary: 0.5
 --- !u!64 &337149947
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -2889,6 +2873,23 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 4493585093827132993, guid: 0d8915096d648494099af6269b8e1797, type: 3}
+--- !u!114 &337149951
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 337149945}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 35e95dc5ff2b64380880dd7ac5922847, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.AI.Navigation::Unity.AI.Navigation.NavMeshModifierVolume
+  m_SerializedVersion: 0
+  m_Size: {x: 7.7724166, y: 9.015462, z: 7.96719}
+  m_Center: {x: -0.07561183, y: 4.007732, z: -0.21283722}
+  m_Area: 0
+  m_AffectedAgents: ffffffff
 --- !u!1001 &347745852
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -12346,7 +12347,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 4c675b7c0e800d44abff0d15c29ae6f9, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -9.33
+      value: -7.91
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 4c675b7c0e800d44abff0d15c29ae6f9, type: 3}
       propertyPath: m_LocalRotation.w
@@ -15203,6 +15204,7 @@ GameObject:
   - component: {fileID: 1933568219}
   - component: {fileID: 1933568223}
   - component: {fileID: 1933568224}
+  - component: {fileID: 1933568225}
   - component: {fileID: 1933568221}
   m_Layer: 0
   m_Name: CinemachineCamera
@@ -15419,6 +15421,24 @@ MonoBehaviour:
     Time: 0
     Smoothing: 0
     IgnoreY: 0
+--- !u!114 &1933568225
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1933568216}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d1ee7a526910ff3408d931c66a4a0ab7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CinemachineSmoothZoom
+  virtualCamera: {fileID: 1933568219}
+  targetFOV: 0
+  minFOV: 20
+  maxFOV: 60
+  zoomSensitivity: 15
+  smoothSpeed: 8
 --- !u!1001 &1949260502
 PrefabInstance:
   m_ObjectHideFlags: 0
