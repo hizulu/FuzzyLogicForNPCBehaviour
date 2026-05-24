@@ -1,6 +1,13 @@
 using UnityEngine;
 using UnityEngine.AI;
 
+/* NOMBRE CLASE: FuzzyAnimalController
+ * AUTOR: Lucía García López
+ * FECHA: 06/05/2025
+ * DESCRIPCIÓN: Controlador de animales basado en lógica difusa que determina el comportamiento de un animal en función de su miedo, curiosidad y distancia al jugador. 
+ *              El animal puede decidir entre huir, acercarse o quedarse quieto.
+ */
+
 public class FuzzyAnimalController : MonoBehaviour
 {
     public AnimalBase animal;
@@ -50,12 +57,14 @@ public class FuzzyAnimalController : MonoBehaviour
         //Debug.Log($"Miedo: {accumulatedFear:F2} | Curiosidad: {currentCuriosity:F2} | Intención: {intention:F2}");
     }
 
+    //Procesa la intención de movimiento y ajusta la velocidad y destino del NavMeshAgent de forma suave, además de actualizar las animaciones correspondientes.
     void HandleContinuousMovement(float intentionValue)
     {
         if (Mathf.Abs(intentionValue) <= idleThreshold)
         {
             if (!wasIdle)
             {
+                //Si el animal acaba de entrar en estado de inactividad, elige aleatoriamente entre animación de Idle o Comer
                 animator.SetInteger("WaitType", Random.Range(0, 2));
                 wasIdle = true;
             }
@@ -115,6 +124,7 @@ public class FuzzyAnimalController : MonoBehaviour
         }
     }
 
+    //Busca otros animales del mismo tipo en un radio definido y calcula el centro de masa de ese grupo para que el animal pueda decidir acercarse a la manada en lugar de al jugador.
     private Vector3 GetNearestGroupCenter()
     {
         Collider[] nearbyColliders = Physics.OverlapSphere(transform.position, groupSearchRadius);
@@ -186,6 +196,7 @@ public class FuzzyAnimalController : MonoBehaviour
         currentCuriosity = Mathf.Clamp01(currentCuriosity);
     }
 
+    //Procesa la lógica difusa combinando las variables de entrada (miedo, curiosidad y distancia) con las reglas definidas en la tabla de reglas para determinar la intención de movimiento del animal.
     float ProcessFuzzyLogic()
     {
         float[] fCuriosity = FuzzifyCuriosity(currentCuriosity);
@@ -217,10 +228,10 @@ public class FuzzyAnimalController : MonoBehaviour
                 }
             }
         }
-
         return Defuzzification.Defuzzify(outputWeights, outputValues);
     }
 
+    //Funciones de fuzzificación para cada variable de entrada, utilizando funciones de membresía adecuadas para representar los diferentes niveles de miedo, distancia y curiosidad.
     private float[] FuzzifyFear(float valor)
     {
         float[] degrees = new float[5];

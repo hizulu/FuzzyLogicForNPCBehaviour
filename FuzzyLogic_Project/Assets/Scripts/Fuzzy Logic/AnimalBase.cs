@@ -4,7 +4,6 @@ using UnityEngine;
  * AUTOR: Lucía García López
  * FECHA: 24/03/2025
  * DESCRIPCIÓN: Define los atributos base de un animal.
- * VERSIÓN: 1.0
  */
 
 [CreateAssetMenu(fileName = "AnimalBase", menuName = "Scriptable Objects/New Animal")]

@@ -1,5 +1,11 @@
 using UnityEngine;
 
+/* NOMBRE CLASE: Defuzzification
+ * AUTOR: Lucía García López
+ * FECHA: 06/05/2025
+ * DESCRIPCIÓN: Implementa el proceso de defuzzificación utilizando el método singleton para convertir los grados de pertenencia difusos en un valor concreto que determine la acción del animal.
+ */
+
 public class Defuzzification : MonoBehaviour
 {
     public static float Defuzzify(float[] membershipGrades, float[] targetValues)

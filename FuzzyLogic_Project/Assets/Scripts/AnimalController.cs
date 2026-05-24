@@ -3,6 +3,13 @@ using UnityEngine.AI;
 [RequireComponent(typeof(NavMeshAgent))]
 [RequireComponent(typeof(Animator))]
 
+/* NOMBRE CLASE: AnimalController
+ * AUTOR: Lucía García López
+ * FECHA: 22/04/2025
+ * DESCRIPCIÓN: Controlador de animales que se mueve aleatoriamente dentro de un área definida. 
+ *              El animal alterna entre caminar, correr y esperar, con animaciones correspondientes.
+ */
+
 public class AnimalController : MonoBehaviour
 {
     [Header("Ajustes de IA")]
@@ -46,7 +53,7 @@ public class AnimalController : MonoBehaviour
 
     void FindNewDestination()
     {
-        //Se buscamos un punto aleatorio dentro de un area
+        //Se busca un punto aleatorio dentro de un area
         Vector3 randomPoint = transform.position + Random.insideUnitSphere * areaRadius;
         NavMeshHit hit;
 
@@ -73,7 +80,7 @@ public class AnimalController : MonoBehaviour
         animator.SetBool("IsMoving", false);
         waitingTimer = Random.Range(minWaitingTime, maxWaitingTime);
 
-        //Elegir aleatoriamente entre Idle (0) o Comer (1) mientras espera
+        //Elige aleatoriamente entre Idle (0) o Comer (1) mientras espera
         animator.SetInteger("WaitType", Random.Range(0, 2));
     }
     

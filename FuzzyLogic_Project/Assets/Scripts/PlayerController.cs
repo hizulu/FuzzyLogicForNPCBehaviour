@@ -1,5 +1,11 @@
 using UnityEngine;
 
+/* NOMBRE CLASE: PlayerController
+ * AUTOR: Lucía García López
+ * FECHA: 14/04/2025
+ * DESCRIPCIÓN: Controlador del jugador que maneja el movimiento basado en el input del teclado, con una dirección relativa a la cámara.
+ */
+
 public class PlayerController : MonoBehaviour
 {
     [Header("Configuración de Movimiento")]

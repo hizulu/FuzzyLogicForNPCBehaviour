@@ -1,5 +1,11 @@
 using UnityEngine;
 
+/* NOMBRE CLASE: RuleTables
+ * AUTOR: Lucía García López
+ * FECHA: 06/05/2025
+ * DESCRIPCIÓN: Define las tablas de reglas para la lógica difusa del comportamiento animal.
+ */
+
 public enum DistanceTag { VeryClose = 0, Close = 1, Medium = 2, Far = 3, VeryFar = 4 }
 public enum FearTag { Relaxed = 0, Cautious = 1, Alert = 2, Scared = 3, Panic = 4 }
 public enum CuriosityTag { None = 0, Low = 1, Medium = 2, High = 3, Extreme = 4 }

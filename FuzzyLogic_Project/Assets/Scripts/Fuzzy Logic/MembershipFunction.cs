@@ -1,7 +1,14 @@
 using UnityEngine;
 
+/* NOMBRE CLASE: MembershipFunction
+ * AUTOR: Lucía García López
+ * FECHA: 06/05/2025
+ * DESCRIPCIÓN: Define las funciones de membresía para la lógica difusa, incluyendo booleanas, triángulos, trapecios y de grado.
+ */
+
 public class MembershipFunction: MonoBehaviour
 {
+    //Forma: _|¯
     public static float Boolean(float value, float x0)
     {
         float membership = 0f;
@@ -14,6 +21,7 @@ public class MembershipFunction: MonoBehaviour
         return membership;
     }
 
+    //Forma: ¯|_
     public static float InverseBoolean(float value, float x0)
     {
         float membership = 0f;
@@ -26,6 +34,7 @@ public class MembershipFunction: MonoBehaviour
         return membership;
     }
 
+    //Forma: ¯\_
     public static float LeftShoulder(float value, float x0, float x1)
     {
         float membership = 0f;
@@ -40,6 +49,7 @@ public class MembershipFunction: MonoBehaviour
         return membership;
     }
 
+    //Forma: _/¯
     public static float RightShoulder(float value, float x0, float x1)
     {
         float membership = 0f;
@@ -54,6 +64,7 @@ public class MembershipFunction: MonoBehaviour
         return membership;
     }
 
+    //Forma: _/\_
     public static float Triangle(float value, float x0, float x1, float x2)
     {
         float membership = 0f;
@@ -72,6 +83,7 @@ public class MembershipFunction: MonoBehaviour
         return membership;
     }
 
+    //Forma: _/¯\_
     public static float Trapezoid(float value, float x0, float x1, float x2, float x3)
     {
         float membership = 0f;
