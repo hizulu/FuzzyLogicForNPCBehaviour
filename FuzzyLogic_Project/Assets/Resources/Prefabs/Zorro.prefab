@@ -344,6 +344,10 @@ MonoBehaviour:
   groupSearchRadius: 30
   fearIcon: {fileID: 912444314343395843}
   curiosityIcon: {fileID: 3637017611816971011}
+  areaRadius: 10
+  minWaitingTime: 3
+  maxWaitingTime: 7
+  walkSpeed: 2.5
 --- !u!4 &8047738815118315048 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 777267514cb2e2342b49298a1062c935, type: 3}

@@ -349,3 +349,7 @@ MonoBehaviour:
   groupSearchRadius: 30
   fearIcon: {fileID: 5650328043625467225}
   curiosityIcon: {fileID: 4282092954609367470}
+  areaRadius: 10
+  minWaitingTime: 3
+  maxWaitingTime: 7
+  walkSpeed: 1.5

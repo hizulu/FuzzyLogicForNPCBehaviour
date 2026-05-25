@@ -41,6 +41,16 @@ public class FuzzyAnimalController : MonoBehaviour
     private Coroutine fearCoroutineRef;
     private Coroutine curiosityCoroutineRef;
 
+    [Header("Ajustes de Patrulla Autónoma")]
+    public float areaRadius = 10f;
+    public float minWaitingTime = 3f;
+    public float maxWaitingTime = 7f;
+    public float walkSpeed = 2f;
+
+    private float waitingTimer;
+    private bool isWaiting = true;
+    private bool isPatrolling = false;
+
     private Vector3 previousPlayerPosition;
     private float playerSpeed;
 
@@ -63,12 +73,82 @@ public class FuzzyAnimalController : MonoBehaviour
         if (player == null) return;
 
         UpdateInputVariables();
-        intention = ProcessFuzzyLogic();
-        HandleContinuousMovement(intention);
 
-        //Debug.Log($"Miedo: {accumulatedFear:F2} | Curiosidad: {currentCuriosity:F2} | Intención: {intention:F2}");
+        if (currentDistance > animal.detectionRadius)
+        {
+            currentDominantAction = Action.Idle;
+            ExecutePatrolBehavior();
+        }
+        else
+        {
+            if (isPatrolling)
+            {
+                isPatrolling = false;
+            }
+            intention = ProcessFuzzyLogic();
+            HandleContinuousMovement(intention);
+        }
         UpdateVisualIcons();
     }
+
+    #region Patrulla
+    //Ejecuta el comportamiento de patrulla autónoma cuando el jugador está fuera del rango de detección, haciendo que el animal se mueva aleatoriamente dentro de un área definida, alternando entre caminar y esperar con animaciones correspondientes.
+    void ExecutePatrolBehavior()
+    {
+        if (!isPatrolling)
+        {
+            isPatrolling = true;
+            StartWait();
+        }
+
+        if (!agent.pathPending && agent.remainingDistance <= agent.stoppingDistance)
+        {
+            if (!isWaiting) StartWait();
+        }
+
+        if (isWaiting)
+        {
+            UpdateWaiting();
+        }
+
+        UpdateAnimations(agent.velocity.magnitude);
+    }
+
+    void StartWait()
+    {
+        isWaiting = true;
+        agent.isStopped = true;
+        agent.velocity = Vector3.zero;
+
+        waitingTimer = Random.Range(minWaitingTime, maxWaitingTime);
+        animator.SetInteger("WaitType", Random.Range(0, 2));
+    }
+
+    void UpdateWaiting()
+    {
+        waitingTimer -= Time.deltaTime;
+
+        if (waitingTimer <= 0)
+        {
+            FindNewDestination();
+        }
+    }
+
+    void FindNewDestination()
+    {
+        Vector3 randomPoint = transform.position + Random.insideUnitSphere * areaRadius;
+        NavMeshHit hit;
+
+        if (NavMesh.SamplePosition(randomPoint, out hit, areaRadius, 1))
+        {
+            agent.isStopped = false;
+            agent.SetDestination(hit.position);
+            agent.speed = walkSpeed;
+
+            isWaiting = false;
+        }
+    }
+    #endregion
 
     //Procesa la intención de movimiento y ajusta la velocidad y destino del NavMeshAgent de forma suave, además de actualizar las animaciones correspondientes.
     void HandleContinuousMovement(float intentionValue)

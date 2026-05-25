@@ -300,6 +300,10 @@ MonoBehaviour:
   groupSearchRadius: 30
   fearIcon: {fileID: 4049052888581032801}
   curiosityIcon: {fileID: 8398593972210013614}
+  areaRadius: 10
+  minWaitingTime: 3
+  maxWaitingTime: 7
+  walkSpeed: 1.2
 --- !u!95 &328374138406334722
 Animator:
   serializedVersion: 7
