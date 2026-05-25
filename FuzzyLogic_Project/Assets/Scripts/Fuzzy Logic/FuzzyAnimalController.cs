@@ -32,6 +32,15 @@ public class FuzzyAnimalController : MonoBehaviour
     [Header("Comportamiento de Manada")]
     public float groupSearchRadius = 20f;
 
+    [Header("Indicadores Visuales (Iconos)")]
+    public GameObject fearIcon;
+    public GameObject curiosityIcon;
+    private Action currentDominantAction = Action.Idle;
+    private bool fearIconDisplayed = false;
+    private bool curiosityIconDisplayed = false;
+    private Coroutine fearCoroutineRef;
+    private Coroutine curiosityCoroutineRef;
+
     private Vector3 previousPlayerPosition;
     private float playerSpeed;
 
@@ -44,6 +53,9 @@ public class FuzzyAnimalController : MonoBehaviour
         currentCuriosity = 0.5f;
 
         if (player != null) previousPlayerPosition = player.position;
+
+        if (fearIcon != null) fearIcon.SetActive(false);
+        if (curiosityIcon != null) curiosityIcon.SetActive(false);
     }
 
     void Update()
@@ -55,6 +67,7 @@ public class FuzzyAnimalController : MonoBehaviour
         HandleContinuousMovement(intention);
 
         //Debug.Log($"Miedo: {accumulatedFear:F2} | Curiosidad: {currentCuriosity:F2} | Intención: {intention:F2}");
+        UpdateVisualIcons();
     }
 
     //Procesa la intención de movimiento y ajusta la velocidad y destino del NavMeshAgent de forma suave, además de actualizar las animaciones correspondientes.
@@ -196,6 +209,71 @@ public class FuzzyAnimalController : MonoBehaviour
         currentCuriosity = Mathf.Clamp01(currentCuriosity);
     }
 
+    //Actualiza los iconos visuales de miedo y curiosidad en función de la acción dominante actual del animal, mostrando el icono correspondiente durante un tiempo limitado cuando el animal está huyendo o acercándose.
+    void UpdateVisualIcons()
+    {
+        bool isFleeingOrRetreating = currentDominantAction == Action.FastFlee || currentDominantAction == Action.SlowRetreat;
+        bool isApproaching = currentDominantAction == Action.FastApproach || currentDominantAction == Action.SlowApproach;
+
+        if (isFleeingOrRetreating)
+        {
+            if (curiosityCoroutineRef != null)
+            {
+                StopCoroutine(curiosityCoroutineRef);
+                curiosityCoroutineRef = null;
+            }
+            if (curiosityIcon != null) curiosityIcon.SetActive(false);
+            curiosityIconDisplayed = false;
+
+            if (!fearIconDisplayed && fearIcon != null)
+            {
+                fearIconDisplayed = true;
+                fearCoroutineRef = StartCoroutine(fearIconTemporarilyDisplayed());
+            }
+        }
+        else
+        {
+            fearIconDisplayed = false;
+        }
+
+        if (isApproaching)
+        {
+            if (fearCoroutineRef != null)
+            {
+                StopCoroutine(fearCoroutineRef);
+                fearCoroutineRef = null;
+            }
+            if (fearIcon != null) fearIcon.SetActive(false);
+            fearIconDisplayed = false;
+
+            if (!curiosityIconDisplayed && curiosityIcon != null)
+            {
+                curiosityIconDisplayed = true;
+                curiosityCoroutineRef = StartCoroutine(curiosityIconTemporarilyDisplayed());
+            }
+        }
+        else
+        {
+            curiosityIconDisplayed = false;
+        }
+    }
+
+    private System.Collections.IEnumerator fearIconTemporarilyDisplayed()
+    {
+        fearIcon.SetActive(true);
+        yield return new WaitForSeconds(3f);
+        fearIcon.SetActive(false);
+        fearCoroutineRef = null;
+    }
+
+    private System.Collections.IEnumerator curiosityIconTemporarilyDisplayed()
+    {
+        curiosityIcon.SetActive(true);
+        yield return new WaitForSeconds(3f);
+        curiosityIcon.SetActive(false);
+        curiosityCoroutineRef = null;
+    }
+
     //Procesa la lógica difusa combinando las variables de entrada (miedo, curiosidad y distancia) con las reglas definidas en la tabla de reglas para determinar la intención de movimiento del animal.
     float ProcessFuzzyLogic()
     {
@@ -228,6 +306,19 @@ public class FuzzyAnimalController : MonoBehaviour
                 }
             }
         }
+        int winningIndex = 2;
+        float maxWeight = -1f;
+
+        for (int i = 0; i < 5; i++)
+        {
+            if (outputWeights[i] > maxWeight)
+            {
+                maxWeight = outputWeights[i];
+                winningIndex = i;
+            }
+        }
+        currentDominantAction = (Action)winningIndex;
+
         return Defuzzification.Defuzzify(outputWeights, outputValues);
     }
 
