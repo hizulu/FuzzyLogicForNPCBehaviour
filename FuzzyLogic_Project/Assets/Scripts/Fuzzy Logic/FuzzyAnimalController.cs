@@ -51,6 +51,13 @@ public class FuzzyAnimalController : MonoBehaviour
     private bool isWaiting = true;
     private bool isPatrolling = false;
 
+    [Header("Puntos de Interés (Comida)")]
+    public float foodSearchRadius = 15f;
+    public float foodInteractionRadius = 2.0f;
+    public float foodCooldownDuration = 20f;
+    private float foodCooldownTimer = 0f;
+    private float eatingTimer;
+
     private Vector3 previousPlayerPosition;
     private float playerSpeed;
 
@@ -71,6 +78,11 @@ public class FuzzyAnimalController : MonoBehaviour
     void Update()
     {
         if (player == null) return;
+
+        if (foodCooldownTimer > 0f)
+        {
+            foodCooldownTimer -= Time.deltaTime;
+        }
 
         UpdateInputVariables();
 
@@ -100,8 +112,20 @@ public class FuzzyAnimalController : MonoBehaviour
             isPatrolling = true;
             StartWait();
         }
-
-        if (!agent.pathPending && agent.remainingDistance <= agent.stoppingDistance)
+        bool arrived = !agent.pathPending && agent.remainingDistance <= agent.stoppingDistance;
+        if (!arrived && !isWaiting)
+        {
+            Transform closestFood = GetClosestFoodSource();
+            if (closestFood != null)
+            {
+                float distanceToFood = Vector3.Distance(transform.position, closestFood.position);
+                if (distanceToFood <= 3.5f && agent.velocity.magnitude < 0.2f)
+                {
+                    arrived = true;
+                }
+            }
+        }
+        if (arrived)
         {
             if (!isWaiting) StartWait();
         }
@@ -121,7 +145,15 @@ public class FuzzyAnimalController : MonoBehaviour
         agent.velocity = Vector3.zero;
 
         waitingTimer = Random.Range(minWaitingTime, maxWaitingTime);
-        animator.SetInteger("WaitType", Random.Range(0, 2));
+        Transform closestFood = GetClosestFoodSource();
+        if (closestFood != null && Vector3.Distance(transform.position, closestFood.position) <= 3.5f)
+        {
+            animator.SetInteger("WaitType", 1);
+        }
+        else
+        {
+            animator.SetInteger("WaitType", Random.Range(0, 2));
+        }
     }
 
     void UpdateWaiting()
@@ -130,12 +162,29 @@ public class FuzzyAnimalController : MonoBehaviour
 
         if (waitingTimer <= 0)
         {
+            if (animator.GetInteger("WaitType") == 1)
+            {
+                foodCooldownTimer = foodCooldownDuration;
+            }
             FindNewDestination();
         }
     }
 
     void FindNewDestination()
     {
+        Transform closestFood = GetClosestFoodSource();
+
+        //Si detecta comida en modo patrulla, va directo a ella en lugar de andar al azar
+        if (closestFood != null)
+        {
+            agent.isStopped = false;
+            agent.SetDestination(closestFood.position);
+            agent.speed = walkSpeed;
+            isWaiting = false;
+            return;
+        }
+
+        //Si no hay comida, hace la patrulla aleatoria
         Vector3 randomPoint = transform.position + Random.insideUnitSphere * areaRadius;
         NavMeshHit hit;
 
@@ -153,21 +202,10 @@ public class FuzzyAnimalController : MonoBehaviour
     //Procesa la intención de movimiento y ajusta la velocidad y destino del NavMeshAgent de forma suave, además de actualizar las animaciones correspondientes.
     void HandleContinuousMovement(float intentionValue)
     {
-        if (Mathf.Abs(intentionValue) <= idleThreshold)
-        {
-            if (!wasIdle)
-            {
-                //Si el animal acaba de entrar en estado de inactividad, elige aleatoriamente entre animación de Idle o Comer
-                animator.SetInteger("WaitType", Random.Range(0, 2));
-                wasIdle = true;
-            }
+        Transform closestFood = GetClosestFoodSource();
 
-            agent.isStopped = true;
-            agent.speed = Mathf.MoveTowards(agent.speed, 0f, Time.deltaTime * fuzzyAcceleration);
-
-            UpdateAnimations(agent.velocity.magnitude);
-        }
-        else
+        // El animal huye (El miedo interrumpe la comida)
+        if (intentionValue < 0 || accumulatedFear > 0.45f)
         {
             wasIdle = false;
             agent.isStopped = false;
@@ -176,45 +214,106 @@ public class FuzzyAnimalController : MonoBehaviour
             dirToPlayer.y = 0f;
             dirToPlayer.Normalize();
 
-            Vector3 dynamicDestination;
-
-            if (intentionValue > 0)
-            {
-                dynamicDestination = player.position - dirToPlayer * 2.0f;
-            }
-            else
-            {
-                Vector3 groupCenter = GetNearestGroupCenter();
-
-                if (groupCenter != Vector3.zero)
-                {
-                    dynamicDestination = groupCenter;
-                }
-                else
-                {
-                    dynamicDestination = transform.position - dirToPlayer * 2f;
-                }
-            }
+            Vector3 groupCenter = GetNearestGroupCenter();
+            Vector3 dynamicDestination = (groupCenter != Vector3.zero) ? groupCenter : (transform.position - dirToPlayer * 2f);
 
             agent.SetDestination(dynamicDestination);
 
             float targetSpeed = Mathf.Abs(intentionValue);
-
-            if (intentionValue < 0 && playerSpeed > playerMovementThreshold)
+            if (playerSpeed > playerMovementThreshold)
             {
                 float runIntensity = Mathf.InverseLerp(playerMovementThreshold, 5.0f, playerSpeed);
                 targetSpeed = Mathf.Lerp(targetSpeed, animal.maxSpeed, runIntensity);
             }
 
-            if (!agent.pathPending && agent.remainingDistance <= 0.15f)
-            {
-                targetSpeed = 0f;
-            }
-
             agent.speed = Mathf.MoveTowards(agent.speed, targetSpeed, Time.deltaTime * fuzzyAcceleration);
-
             UpdateAnimations(agent.velocity.magnitude);
         }
+        // El animal se acerca a la comida
+        else if (closestFood != null)
+        {
+            float distanceToFood = Vector3.Distance(transform.position, closestFood.position);
+
+            bool arrivedAtFood = (distanceToFood <= foodInteractionRadius) ||
+                                 (distanceToFood <= 3.5f && !agent.pathPending && agent.velocity.magnitude < 0.2f);
+
+            if (arrivedAtFood)
+            {
+                if (!wasIdle)
+                {
+                    animator.SetInteger("WaitType", 1); // Animación de comer
+                    wasIdle = true;
+                    eatingTimer = Random.Range(minWaitingTime, maxWaitingTime);
+                }
+                agent.isStopped = true;
+                agent.speed = Mathf.MoveTowards(agent.speed, 0f, Time.deltaTime * fuzzyAcceleration);
+
+                eatingTimer -= Time.deltaTime;
+                if (eatingTimer <= 0f)
+                {
+                    foodCooldownTimer = foodCooldownDuration;
+                    wasIdle = false;
+                }
+            }
+            else
+            {
+                wasIdle = false;
+                agent.isStopped = false;
+                agent.SetDestination(closestFood.position);
+                agent.speed = Mathf.MoveTowards(agent.speed, walkSpeed, Time.deltaTime * fuzzyAcceleration);
+            }
+            UpdateAnimations(agent.velocity.magnitude);
+        }
+        // Si no hay comida cerca o está en cooldown, interactúa con el jugador o se queda quieto
+        else
+        {
+            if (Mathf.Abs(intentionValue) <= idleThreshold)
+            {
+                if (!wasIdle)
+                {
+                    animator.SetInteger("WaitType", Random.Range(0, 2));
+                    wasIdle = true;
+                }
+                agent.isStopped = true;
+                agent.speed = Mathf.MoveTowards(agent.speed, 0f, Time.deltaTime * fuzzyAcceleration);
+            }
+            else
+            {
+                wasIdle = false;
+                agent.isStopped = false;
+
+                Vector3 dirToPlayer = (player.position - transform.position).normalized;
+                dirToPlayer.y = 0f;
+                dirToPlayer.Normalize();
+
+                Vector3 dynamicDestination = player.position - dirToPlayer * 2.0f;
+                agent.SetDestination(dynamicDestination);
+
+                agent.speed = Mathf.MoveTowards(agent.speed, intentionValue, Time.deltaTime * fuzzyAcceleration);
+            }
+            UpdateAnimations(agent.velocity.magnitude);
+        }
+    }
+
+    //Busca fuentes de comida cercanas dentro de un radio definido, considerando un cooldown después de comer para evitar que el animal se quede atascado en la búsqueda de comida constantemente.
+    private Transform GetClosestFoodSource()
+    {
+        if (foodCooldownTimer > 0f) return null;
+
+        PointOfInterest[] allFoods = GameObject.FindObjectsByType<PointOfInterest>(FindObjectsSortMode.None);
+        Transform bestTarget = null;
+        float closestDistance = foodSearchRadius;
+
+        foreach (PointOfInterest food in allFoods)
+        {
+            float distance = Vector3.Distance(transform.position, food.transform.position);
+            if (distance < closestDistance)
+            {
+                closestDistance = distance;
+                bestTarget = food.transform;
+            }
+        }
+        return bestTarget;
     }
 
     //Busca otros animales del mismo tipo en un radio definido y calcula el centro de masa de ese grupo para que el animal pueda decidir acercarse a la manada en lugar de al jugador.
