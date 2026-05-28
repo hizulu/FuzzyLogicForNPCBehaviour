@@ -1,14 +1,9 @@
 fileFormatVersion: 2
-guid: 0d8915096d648494099af6269b8e1797
+guid: 74cc8430edfb18c46bee70061535dd26
 ModelImporter:
   serializedVersion: 24200
   internalIDToNameTable: []
-  externalObjects:
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: Granero
-    second: {fileID: 2100000, guid: 3f72d6595f9beb549a3d6e5c85320af8, type: 2}
+  externalObjects: {}
   materials:
     materialImportMode: 2
     materialName: 0
