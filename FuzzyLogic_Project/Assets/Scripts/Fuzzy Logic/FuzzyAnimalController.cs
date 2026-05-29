@@ -320,10 +320,17 @@ public class FuzzyAnimalController : MonoBehaviour
         }
     }
 
-    //Busca fuentes de comida cercanas dentro de un radio definido, considerando un cooldown después de comer para evitar que el animal se quede atascado en la búsqueda de comida constantemente.
+    //Busca comida dentro de un radio definido alrededor del animal, priorizando las fuentes de comida que estén dentro de su área de patrulla y que no estén en cooldown, para que el animal pueda decidir ir a comer en lugar de interactuar con el jugador o patrullar.
     private Transform GetClosestFoodSource()
     {
         if (foodCooldownTimer > 0f) return null;
+
+        //Si está muy lejos de casa, prioriza volver
+        float distanceToHome = Vector3.Distance(transform.position, actualHomePosition);
+        if (distanceToHome > areaRadius * 2.0f)
+        {
+            return null;
+        }
 
         PointOfInterest[] allFoods = GameObject.FindObjectsByType<PointOfInterest>(FindObjectsSortMode.None);
         Transform bestTarget = null;
@@ -331,6 +338,15 @@ public class FuzzyAnimalController : MonoBehaviour
 
         foreach (PointOfInterest food in allFoods)
         {
+            if (!food.CanAnimalEat(animal))
+                continue;
+
+            float foodToHomeDist = Vector3.Distance(food.transform.position, actualHomePosition);
+            if (foodToHomeDist > areaRadius * 1.3f)
+            {
+                continue;
+            }
+
             float distance = Vector3.Distance(transform.position, food.transform.position);
             if (distance < closestDistance)
             {
