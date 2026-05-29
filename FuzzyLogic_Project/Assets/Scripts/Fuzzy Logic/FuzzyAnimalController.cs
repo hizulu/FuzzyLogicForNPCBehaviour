@@ -42,6 +42,8 @@ public class FuzzyAnimalController : MonoBehaviour
     private Coroutine curiosityCoroutineRef;
 
     [Header("Ajustes de Patrulla Autónoma")]
+    public Transform homePoint;
+    private Vector3 actualHomePosition;
     public float areaRadius = 10f;
     public float minWaitingTime = 3f;
     public float maxWaitingTime = 7f;
@@ -68,6 +70,11 @@ public class FuzzyAnimalController : MonoBehaviour
         agent = GetComponent<NavMeshAgent>();
         animator = GetComponent<Animator>();
         currentCuriosity = 0.5f;
+
+        if (homePoint != null)
+            actualHomePosition = homePoint.position;
+        else
+            actualHomePosition = transform.position;
 
         if (player != null) previousPlayerPosition = player.position;
 
@@ -101,6 +108,24 @@ public class FuzzyAnimalController : MonoBehaviour
             HandleContinuousMovement(intention);
         }
         UpdateVisualIcons();
+    }
+
+    void LateUpdate()
+    {
+        if (Camera.main == null) return;
+
+        Vector3 targetRotationForward = Camera.main.transform.rotation * Vector3.forward;
+        Vector3 targetRotationUp = Camera.main.transform.rotation * Vector3.up;
+
+        if (fearIcon != null && fearIcon.activeSelf)
+        {
+            fearIcon.transform.LookAt(fearIcon.transform.position + targetRotationForward, targetRotationUp);
+        }
+
+        if (curiosityIcon != null && curiosityIcon.activeSelf)
+        {
+            curiosityIcon.transform.LookAt(curiosityIcon.transform.position + targetRotationForward, targetRotationUp);
+        }
     }
 
     #region Patrulla
@@ -184,8 +209,8 @@ public class FuzzyAnimalController : MonoBehaviour
             return;
         }
 
-        //Si no hay comida, hace la patrulla aleatoria
-        Vector3 randomPoint = transform.position + Random.insideUnitSphere * areaRadius;
+        //Si no hay comida, elige un punto aleatorio dentro del área de patrulla alrededor del home point
+        Vector3 randomPoint = actualHomePosition + Random.insideUnitSphere * areaRadius;
         NavMeshHit hit;
 
         if (NavMesh.SamplePosition(randomPoint, out hit, areaRadius, 1))
@@ -204,7 +229,7 @@ public class FuzzyAnimalController : MonoBehaviour
     {
         Transform closestFood = GetClosestFoodSource();
 
-        // El animal huye (El miedo interrumpe la comida)
+        //El animal huye (El miedo interrumpe la comida)
         if (intentionValue < 0 || accumulatedFear > 0.45f)
         {
             wasIdle = false;
@@ -229,7 +254,7 @@ public class FuzzyAnimalController : MonoBehaviour
             agent.speed = Mathf.MoveTowards(agent.speed, targetSpeed, Time.deltaTime * fuzzyAcceleration);
             UpdateAnimations(agent.velocity.magnitude);
         }
-        // El animal se acerca a la comida
+        //El animal se acerca a la comida
         else if (closestFood != null)
         {
             float distanceToFood = Vector3.Distance(transform.position, closestFood.position);
@@ -264,7 +289,7 @@ public class FuzzyAnimalController : MonoBehaviour
             }
             UpdateAnimations(agent.velocity.magnitude);
         }
-        // Si no hay comida cerca o está en cooldown, interactúa con el jugador o se queda quieto
+        //Si no hay comida cerca o está en cooldown, interactúa con el jugador o se queda quieto
         else
         {
             if (Mathf.Abs(intentionValue) <= idleThreshold)
