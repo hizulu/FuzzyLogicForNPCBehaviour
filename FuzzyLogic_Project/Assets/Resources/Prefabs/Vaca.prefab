@@ -256,6 +256,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 86692b9f6561f8c4ab2dc4afa92bef25, type: 3}
       insertIndex: -1
       addedObject: {fileID: 7203607972281508276}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 86692b9f6561f8c4ab2dc4afa92bef25, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 5462648169934506236}
   m_SourcePrefab: {fileID: 100100000, guid: 86692b9f6561f8c4ab2dc4afa92bef25, type: 3}
 --- !u!1 &4885321893274088283 stripped
 GameObject:
@@ -300,10 +303,16 @@ MonoBehaviour:
   groupSearchRadius: 30
   fearIcon: {fileID: 4049052888581032801}
   curiosityIcon: {fileID: 8398593972210013614}
+  homePoint: {fileID: 0}
   areaRadius: 10
   minWaitingTime: 3
   maxWaitingTime: 7
   walkSpeed: 1.2
+  foodSearchRadius: 15
+  foodInteractionRadius: 2
+  foodCooldownDuration: 20
+  predators: []
+  prey: []
 --- !u!95 &328374138406334722
 Animator:
   serializedVersion: 7
@@ -348,6 +357,29 @@ NavMeshAgent:
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
+--- !u!136 &5462648169934506236
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4885321893274088283}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 1.01
+  m_Height: 1
+  m_Direction: 1
+  m_Center: {x: 0, y: 1, z: 0}
 --- !u!4 &5226417249773562337 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 86692b9f6561f8c4ab2dc4afa92bef25, type: 3}

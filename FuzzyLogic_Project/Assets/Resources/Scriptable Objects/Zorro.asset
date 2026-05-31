@@ -16,7 +16,7 @@ MonoBehaviour:
   fearSensitivity: 2
   fearDecay: 0.2
   curiosityDisinterest: 0.2
-  curiosityDecay: 0.1
+  curiosityDecay: 0.02
   baseSpeed: 2.5
   fleeSpeed: 6.5
   maxSpeed: 8.5
