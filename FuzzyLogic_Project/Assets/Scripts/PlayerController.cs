@@ -94,4 +94,8 @@ public class PlayerController : MonoBehaviour
 
         animator.SetFloat(PlayerSpeedParam, animationSpeed, 0.1f, Time.deltaTime);
     }
+
+    public float CurrentSpeed => currentSpeed;
+    public float WalkSpeed => walkSpeed;
+    public float RunSpeed => runSpeed;
 }

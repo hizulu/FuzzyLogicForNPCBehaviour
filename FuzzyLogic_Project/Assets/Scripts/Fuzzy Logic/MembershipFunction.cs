@@ -6,7 +6,7 @@ using UnityEngine;
  * DESCRIPCIÓN: Define las funciones de membresía para la lógica difusa, incluyendo booleanas, triángulos, trapecios y de grado.
  */
 
-public class MembershipFunction: MonoBehaviour
+public static class MembershipFunction
 {
     //Forma: _|¯
     public static float Boolean(float value, float x0)

@@ -6,7 +6,7 @@ using UnityEngine;
  * DESCRIPCIÓN: Implementa el proceso de defuzzificación utilizando el método singleton para convertir los grados de pertenencia difusos en un valor concreto que determine la acción del animal.
  */
 
-public class Defuzzification : MonoBehaviour
+public static class Defuzzification
 {
     public static float Defuzzify(float[] membershipGrades, float[] targetValues)
     {
