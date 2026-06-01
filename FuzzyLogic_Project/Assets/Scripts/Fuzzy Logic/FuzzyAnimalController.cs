@@ -177,6 +177,21 @@ public class FuzzyAnimalController : MonoBehaviour
             }
             intention = ProcessFuzzyLogic();
             HandleContinuousMovement(intention, nearestPredator, bestPrey);
+            //Si lleva sin moverse mucho tiempo, se pone a patrullar
+            if(agent.velocity.magnitude < 0.1f && !isPatrolling)
+            {
+                stuckTimer += Time.deltaTime;
+                if (stuckTimer > 3.0f)
+                {
+                    stuckTimer = 0f;
+                    currentDominantAction = Action.Idle;
+                    ExecutePatrolBehavior();
+                }
+            }
+            else
+            {
+                stuckTimer = 0f;
+            }
         }
         else
         {
@@ -456,17 +471,22 @@ public class FuzzyAnimalController : MonoBehaviour
             return;
         }
 
-        //PRIORIDAD 4: ACERCARSE AL JUGADOR (Curiosidad)
+        //Acercarse a jugador o a comer
         Transform closestFood = GetClosestFoodSource();
         float approachThreshold = isApproachingPlayer ? (idleThreshold * 0.5f) : (idleThreshold + 0.05f);
 
-        bool wantsPlayer = intentionValue > approachThreshold + goalSwitchMargin;
-        bool wantsFood = closestFood != null && intentionValue < approachThreshold - goalSwitchMargin;
+        bool isFoodVeryClose = (closestFood != null && Vector3.Distance(transform.position, closestFood.position) < 3.5f);
+
+        bool wantsPlayer = (intentionValue > approachThreshold + goalSwitchMargin) && !isFoodVeryClose;
+        bool wantsFood = (closestFood != null && intentionValue < approachThreshold - goalSwitchMargin) || isFoodVeryClose;
 
         if (Time.time < goalLockUntil)
         {
-            if (currentStableGoal == StableGoal.FollowPlayer) wantsPlayer = true;
-            if (currentStableGoal == StableGoal.GoFood) wantsFood = true;
+            if (closestFood != null && Vector3.Distance(transform.position, closestFood.position) < 3.0f)
+            {
+                currentStableGoal = StableGoal.GoFood;
+                goalLockUntil = Time.time + goalHoldTime;
+            }
         }
         else
         {
@@ -486,6 +506,7 @@ public class FuzzyAnimalController : MonoBehaviour
             }
         }
 
+        //PRIORIDAD 4: ACERCARSE AL JUGADOR (Curiosidad)
         if (currentStableGoal == StableGoal.FollowPlayer)
         {
             isApproachingPlayer = true;
@@ -711,8 +732,13 @@ public class FuzzyAnimalController : MonoBehaviour
                 float foodToHomeDist = Vector3.Distance(food.transform.position, actualHomePosition);
                 if (foodToHomeDist > areaRadius * 1.3f) continue;
             }
+            else
+            {
+                float foodToSelfDist = Vector3.Distance(food.transform.position, transform.position);
+                if (foodToSelfDist > areaRadius * 2.0f) continue;
+            }
 
-            float distance = Vector3.Distance(transform.position, food.transform.position);
+                float distance = Vector3.Distance(transform.position, food.transform.position);
             if (distance < closestDistance)
             {
                 closestDistance = distance;
