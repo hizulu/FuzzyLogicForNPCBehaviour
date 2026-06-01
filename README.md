@@ -3,6 +3,7 @@
 # Trabajo de Fin de Grado de Lucía García López
 ### Uso de la lógica difusa para el comportamiento de *NPCs*
 </div>
+
 Este repositorio contiene la implementación del sistema de inteligencia artificial basado en **Lógica Difusa (Fuzzy Logic)** para el comportamiento de NPCs (personajes no jugables) en videojuegos.
 
 Este proyecto fue desarrollado como parte del **Trabajo Fin de Grado (TFG)**: *"Uso de la lógica difusa para el comportamiento de NPCs"* en la Universidad de Burgos, enfocado en crear comportamientos animales realistas, dinámicos y sostenibles.
