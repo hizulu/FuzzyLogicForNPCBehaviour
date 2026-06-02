@@ -32,11 +32,6 @@ public class PlayerController : MonoBehaviour
         controller = GetComponent<CharacterController>();
     }
 
-    private void Start()
-    {
-        Cursor.lockState = CursorLockMode.Locked;
-    }
-
     private void Update()
     {
         HandleMovement();
